@@ -3,6 +3,9 @@ using Business.BusinessAspects.Autofac;
 using Business.Contants;
 using Business.CSS;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Ultilities.Business;
 using Core.Ultilities.Results;
@@ -31,6 +34,8 @@ namespace Business.Concrete
             
         }
 
+        [CacheAspect]//key,value
+        [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
         {
             if (DateTime.Now.Hour==18)
@@ -57,6 +62,7 @@ namespace Business.Concrete
 
         [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
             IResult result=BusinessRules.Run(CheckCarCountOfBrandCorrect(car.BrandId),
@@ -72,8 +78,7 @@ namespace Business.Concrete
         }
 
 
-
-
+        [CacheAspect]//key,value
 
         public IDataResult<Car> GetById(int carId)
         {
@@ -81,6 +86,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             throw new NotImplementedException();
@@ -115,6 +121,14 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.BrandLimitExceded);
             }
             return new SuccessResult();
+        }
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Car car)
+        {
+            _carDal.Update(car);
+            _carDal.Add(car);
+            return new SuccessResult(Messages.CarUpdated);
         }
     }
 }

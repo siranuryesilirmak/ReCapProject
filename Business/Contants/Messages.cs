@@ -22,5 +22,7 @@ namespace Business.Contants
         public static string CarImageDeleted;
         public static string CarImageUpdated;
         public static string AuthorizationDenied = "Yetkiniz yok.";
+
+        public static string CarUpdated = "güncellendi.";
     }
 }
