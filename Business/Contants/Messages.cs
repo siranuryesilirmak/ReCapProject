@@ -21,6 +21,6 @@ namespace Business.Contants
         public static string CarImageLimitExceeded;
         public static string CarImageDeleted;
         public static string CarImageUpdated;
-        public static string AuthorizationDenied;
+        public static string AuthorizationDenied = "Yetkiniz yok.";
     }
 }

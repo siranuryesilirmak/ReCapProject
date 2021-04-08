@@ -48,10 +48,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>( _carDal.GetAll(p => p.BrandId == id));
         }
 
-        public IDataResult<List<Car>> GetAll(decimal min, decimal max)
-        {
-            return new SuccessDataResult<List<Car>>( _carDal.GetAll());
-        }
+       
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
