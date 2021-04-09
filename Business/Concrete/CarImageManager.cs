@@ -26,8 +26,8 @@ namespace Business.Concrete
         }
 
         
-        [SecuredOperation("carImages.add,admin")]
-        [ValidationAspect(typeof(CarImageValidator))]
+        //[SecuredOperation("carImages.add,admin")]
+        //[ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(IFormFile file, CarImage carImage)
         {
             IResult result = BusinessRules.Run(CheckImageLimitExceeded(carImage.CarId));
