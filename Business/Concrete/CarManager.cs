@@ -34,19 +34,19 @@ namespace Business.Concrete
             
         }
 
+
         [CacheAspect]//key,value
         [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour==18)
+            if (DateTime.Now.Hour==3)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
             //iş kodları
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.CarsListed);
-            
-
         }
+
 
         public IDataResult<List<Car>> GetAllByBrandId(int id)
         {
@@ -59,6 +59,23 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<CarDetailDto>>( _carDal.GetCarDetails());
         }
+
+
+        public IDataResult<List<CarDetailDto>> GetAllCarDetailByBrand(int brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetAllCarDetailByCarId(int carId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.Id == carId));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetAllCarDetailByColor(int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId));
+        }
+
 
         [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
@@ -78,12 +95,14 @@ namespace Business.Concrete
         }
 
 
-        [CacheAspect]//key,value
 
+        [CacheAspect]//key,value
         public IDataResult<Car> GetById(int carId)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
         }
+
+
 
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
@@ -91,6 +110,8 @@ namespace Business.Concrete
         {
             throw new NotImplementedException();
         }
+
+
 
         private IResult CheckCarCountOfBrandCorrect(int brandId)
         {
@@ -101,6 +122,8 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+
+
 
         private IResult CheckIfDescriptionExists(string description)
         {
@@ -113,6 +136,7 @@ namespace Business.Concrete
         }
         
 
+
         private IResult CheckIfCategoryLimitExceded()
         {
             var result = _brandService.GetAll();
@@ -123,6 +147,8 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+
+
         [TransactionScopeAspect]
         public IResult AddTransactionalTest(Car car)
         {
@@ -130,5 +156,14 @@ namespace Business.Concrete
             _carDal.Add(car);
             return new SuccessResult(Messages.CarUpdated);
         }
+
+
+
+        public IDataResult<List<Car>> GetAllByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+        }
+
+       
     }
 }
