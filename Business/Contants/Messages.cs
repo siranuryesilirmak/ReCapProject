@@ -26,5 +26,12 @@ namespace Business.Contants
         public static string CarUpdated = "güncellendi.";
         public static string CustomersListed = "Müşteriler listelendi";
 
+        public static string RentalAlreadyRented { get; internal set; }
+        public static string RentalAdded { get; internal set; }
+        public static string RentalUpdated { get; internal set; }
+        public static string RentalDeleted { get; internal set; }
+        public static string RentalAlreadyCompleted { get; internal set; }
+        public static string RentalCompleted { get; internal set; }
+        public static string RentalNotDelivered { get; internal set; }
     }
 }
